@@ -81,9 +81,9 @@ public class MainActivity extends AppCompatActivity {
         if (Intent.ACTION_SEARCH.equals(intent.getAction())) {
             //perform search
             String query = intent.getStringExtra(SearchManager.QUERY);
-            List<ItemObject> itemName = LabSQLiteOpenHelper.getInstance(this).
-                    itemNameSearch(query);
-            mAdapter.replaceData(itemName);
+            List<ItemObject> searchList = LabSQLiteOpenHelper.getInstance(this).
+                    itemSearchForNameOrType(query);
+            mAdapter.replaceData(searchList);
         }
     }
 }

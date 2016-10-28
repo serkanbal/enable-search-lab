@@ -85,24 +85,24 @@ public class LabSQLiteOpenHelper extends SQLiteOpenHelper {
         }return itemList;
     }
 
-    public List<ItemObject> itemNameSearch(String query) {
+    public List<ItemObject> itemSearchForNameOrType(String query) {
         SQLiteDatabase db = getReadableDatabase();
 
         Cursor cursor = db.query(TABLE_NAME,
                 null,
-                COL_ITEM_NAME + " LIKE ?",
-                new String[] {"%"+query+"%"},
+                COL_ITEM_NAME + " LIKE ? OR " + COL_TYPE + " LIKE ?",
+                new String[] {"%"+query+"%", "%"+query+"%"},
                 null,
                 null,
-                COL_ITEM_NAME,
+                null,
                 null);
 
         List<ItemObject> itemName = new ArrayList<>();
         if (cursor.moveToFirst()) {
             while (!cursor.isAfterLast()) {
                 ItemObject item = new ItemObject(cursor.getString(cursor.getColumnIndex(COL_ITEM_NAME)),
-                        null,
-                        null,
+                        cursor.getString(cursor.getColumnIndex(COL_DESCRIPTION)),
+                        cursor.getString(cursor.getColumnIndex(COL_TYPE)),
                         null);
                 itemName.add(item);
                 cursor.moveToNext();
@@ -110,5 +110,32 @@ public class LabSQLiteOpenHelper extends SQLiteOpenHelper {
         }cursor.close();
         return itemName;
     }
+
+//    public List<ItemObject> itemTypeSearch(String query) {
+//        SQLiteDatabase db = getReadableDatabase();
+//
+//        Cursor cursor = db.query(TABLE_NAME,
+//                null,
+//                COL_TYPE + " LIKE ?",
+//                new String[] {"%"+query+"%"},
+//                null,
+//                null,
+//                COL_TYPE,
+//                null);
+//
+//        List<ItemObject> itemType = new ArrayList<>();
+//        if (cursor.moveToFirst()) {
+//            while (!cursor.isAfterLast()) {
+//                ItemObject type = new ItemObject(cursor.getString(cursor.getColumnIndex(COL_TYPE)),
+//                        null,
+//                        null,
+//                        null);
+//                itemType.add(type);
+//                cursor.moveToNext();
+//            }
+//        }cursor.close();
+//        return itemType;
+//
+//    }
 
 }
